@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "mix",
+        "prod": "mix"
+    },
+    "devDependencies": {
+        "axios": "^1.1.2",
+        "resolve-url-loader": "^5.0.0",
+        "sass": "^1.81.0",
+        "sass-loader": "^16.0.3",
+        "vue": "^3.5.13",
+        "vue-loader": "^17.3.1"
+    },
+    "dependencies": {
+        "laravel-mix": "^6.0.49"
+    }
+}
