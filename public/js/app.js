@@ -19973,13 +19973,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   methods: {
     // Функція для отримання шляху до фото
     getUserPhoto: function getUserPhoto(photo) {
-      if (!photo) {
-        return '/default-photo.png';
-      }
       if (photo.startsWith('http://') || photo.startsWith('https://')) {
         return photo;
       }
-      return photo;
+      return "".concat(window.location.origin, "/").concat(photo);
     },
     // Завантаження користувачів
     loadUsers: function loadUsers() {

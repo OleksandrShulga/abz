@@ -41,13 +41,10 @@ export default {
     methods: {
         // Функція для отримання шляху до фото
         getUserPhoto(photo) {
-            if (!photo) {
-                return '/default-photo.png';
-            }
             if (photo.startsWith('http://') || photo.startsWith('https://')) {
                 return photo;
             }
-            return photo;
+            return `${window.location.origin}/${photo}`;
         },
 
         // Завантаження користувачів
