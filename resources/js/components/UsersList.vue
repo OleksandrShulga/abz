@@ -11,6 +11,8 @@
                         :src="getUserPhoto(user.photo)"
                         alt="User Photo"
                         style="width: 70px; height: 70px; object-fit: cover;"
+                        loading="lazy"
+                        :placeholder="'/storage/lezy.png'"
                     />
                 </div>
             </div>

@@ -20070,7 +20070,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "width": "70px",
         "height": "70px",
         "object-fit": "cover"
-      }
+      },
+      loading: "lazy",
+      placeholder: '/storage/lezy.png'
     }, null, 8 /* PROPS */, _hoisted_2)])]);
   }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Кнопка \"Show More\" для завантаження наступної сторінки "), $data.users.current_page < $data.users.last_page ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
