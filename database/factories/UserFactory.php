@@ -21,8 +21,8 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->phoneNumber(), // Генерує випадковий номер телефону
-            'position_id' => fake()->numberBetween(1, 10), // Генерує ID позиції в діапазоні 1-10
-            'photo' => fake()->imageUrl(70, 70, 'people', true, '  Фото людини   '),
+            'position_id' => fake()->numberBetween(1, 4), // Генерує ID позиції в діапазоні 1-4
+            'photo' => fake()->imageUrl(70, 70, 'people', true, ''),
             'remember_token' => Str::random(10),
         ];
     }

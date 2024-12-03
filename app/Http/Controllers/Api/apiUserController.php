@@ -26,10 +26,10 @@ class apiUserController extends Controller
         // Зберігаємо токен в кеші на 40 хвилин (відповідає вимогам)
         Cache::put('registration_token_' . $token, true, now()->addMinutes(40));
 
-        return response()->json([
-            'success' => true,
+        session([
             'token' => $token,
-            'expires_in' => 2400,  // Тривалість токену в секундах (40 хвилин)
+            'token_expiry' => now()->addSeconds(2400),
         ]);
+        return redirect()->route('token')->with('success', 'Token created successfully!');
     }
 }

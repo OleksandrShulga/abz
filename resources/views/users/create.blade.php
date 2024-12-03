@@ -37,8 +37,18 @@
         <label for="phone">Phone</label>
         <input type="text" id="phone" name="phone" value="{{ old('phone') }}" required>
 
-        <label for="position_id">Position_id</label>
-        <input type="number" id="position_id" name="position_id" value="{{ old('position_id') }}" required>
+        <label for="position_id">Position</label>
+        <select id="position_id" name="position_id" required>
+            <option value="">Select a Position</option>
+            @foreach($positions as $position)
+                <option value="{{ $position->id }}" {{ old('position_id') == $position->id ? 'selected' : '' }}>
+                    {{ $position->name }}
+                </option>
+            @endforeach
+        </select>
+
+        <label for="token">Token</label>
+        <input type="text" id="token" name="token" value="{{ old('token') }}" required>
 
         <label for="image">Image (solo PNG):</label>
         <input type="file" name="image" id="image" accept="image/png" required>

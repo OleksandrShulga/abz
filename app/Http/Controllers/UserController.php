@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Token;
+use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Tinify\Tinify;
+use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
     public function create()
     {
-        return view('users.create');
+        $positions = Position::all(); // Отримуємо всі позиції
+        return view('users.create', compact('positions'));
     }
 
     public function see()
@@ -24,9 +31,23 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|regex:/^\+?[0-9]{7,15}$/',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'position_id' => 'required|integer|min:1',
+            'token' => 'required|string|max:60',
         ]);
+
+        $token = Token::where('token', $validated['token'])->where('created_at', '>=', Carbon::now()->subMinutes(240))->first();
+        if (empty($token)) {
+            throw ValidationException::withMessages([
+                'token' => ['Token not found or has expired'],
+            ]);
+        } else if (!empty($token->use)) {
+            throw ValidationException::withMessages([
+                'token' => ['Token was used'],
+            ]);
+        } else {
+            Token::where('token', $validated['token'])->update(['use' => true]);
+        }
 
         $imagePath = $this->insertUserImage($request->file('image'));
 
@@ -49,23 +70,45 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        return response()->json($user);
+        $user['position'] = Position::find($user['position_id'])->name;
+
+        return response()->json(['success' => true, 'positions' => $user]);
     }
 
     public function positions()
     {
-        $users = User::all(['position_id', 'name']); // Знайти користувача за ID
+        $position = Position::all(['id', 'name']);
 
-        if (!$users) {
+        if (!$position) {
             return response()->json(['message' => 'Users not found'], 404); // Якщо користувач не знайдений
         }
 
-        return response()->json(['success' => true, 'positions' => $users]); // Повернути дані користувача у форматі JSON
+        return response()->json(['success' => true, 'positions' => $position]); // Повернути дані користувача у форматі JSON
     }
 
     public function token()
     {
-        return view('token'); // Повертаємо Blade шаблон, де буде форма або кнопка
+        $this->generateRegistrationToken();
+        return view('token', [
+            'token' => session('token'),
+            'expiryTime' => session('token_expiry'),
+        ]); // Повертаємо Blade шаблон, де буде форма або кнопка
+    }
+
+    public function generateRegistrationToken()
+    {
+        // Генерація унікального токену
+        $token = Str::random(60);
+
+        // Зберігаємо токен в кеші на 40 хвилин (відповідає вимогам)
+        Cache::put('registration_token_' . $token, true, now()->addMinutes(40));
+
+        Token::create(['token' => $token, 'use' => false]);
+
+        session([
+            'token' => $token,
+            'token_expiry' => now()->addSeconds(2400),
+        ]);
     }
 
     private function insertUserImage ($uploadedImage)

@@ -6,6 +6,7 @@
                 <div>Name: {{ user.name }}</div>
                 <div>Email: {{ user.email }}</div>
                 <div>Phone: {{ user.phone }}</div>
+                <div>Position ID: {{ user.position_id }}</div>
                 <div>
                     <img
                         :src="getUserPhoto(user.photo)"
