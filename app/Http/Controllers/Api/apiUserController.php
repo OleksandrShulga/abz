@@ -12,7 +12,7 @@ class apiUserController extends Controller
 {
     public function getUsers(Request $request)
     {
-        $users = User::paginate(6);
+        $users = User::with('position')->paginate(6);
 
         return response()->json($users);
     }

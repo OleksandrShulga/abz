@@ -28,7 +28,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:2',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|regex:/^\+?[0-9]{7,15}$/',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -58,6 +58,8 @@ class UserController extends Controller
             'photo' => $imagePath,
             'position_id' => $validated['position_id'],
         ]);
+
+        $users = User::with('position')->get();
 
         return redirect()->route('users.create')->with('success', 'User created successfully!');
     }

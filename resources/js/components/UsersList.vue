@@ -5,8 +5,10 @@
                 <div>USER #{{ user.id }}</div>
                 <div>Name: {{ user.name }}</div>
                 <div>Email: {{ user.email }}</div>
+                <div>Registration: {{ user.created_at }}</div>
                 <div>Phone: {{ user.phone }}</div>
                 <div>Position ID: {{ user.position_id }}</div>
+                <div>Position: {{ user.position.name }}</div>
                 <div>
                     <img
                         :src="getUserPhoto(user.photo)"
