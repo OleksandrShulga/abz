@@ -7,7 +7,7 @@
 
     @if(session('token'))
         <p><strong>Token:</strong> {{ $token }}</p>
-        <p><strong>Token Expiry:</strong> {{ $expiryTime }}</p>
+        <p><strong>Token Expiry (Greenwich time):</strong> {{ $expiryTime }}</p>
     @else
         <p>No token found in session.</p>
     @endif
